@@ -1,5 +1,5 @@
 {
-  "name": "react-native-numeric-textinput",
+  "name": "@wwdrew/react-native-numeric-textinput",
   "version": "1.0.0",
   "description": "A React Native TextInput that formats and displays only numeric inputs, including currency and percentages.",
   "main": "lib/NumericTextInput.js",

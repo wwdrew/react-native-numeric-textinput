@@ -2,14 +2,20 @@
   "name": "react-native-numeric-textinput",
   "version": "1.0.0",
   "description": "A React Native TextInput that formats and displays only numeric inputs, including currency and percentages.",
-  "main": "NumericTextInput.js",
+  "main": "lib/NumericTextInput.js",
   "scripts": {
+    "prepack": "npm run prepack:babel && npm run prepack:flow",
+    "prepack:babel": "babel src/ -d lib",
+    "prepack:flow": "flow-copy-source src lib",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/wwdrew/react-native-numeric-textinput.git"
   },
+  "files": [
+    "lib"
+  ],
   "keywords": [
     "react-native",
     "textinput",
@@ -27,5 +33,13 @@
   "homepage": "https://github.com/wwdrew/react-native-numeric-textinput#readme",
   "dependencies": {
     "currency-codes": "^1.5.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.4.3",
+    "@babel/core": "^7.4.3",
+    "@babel/plugin-transform-flow-strip-types": "^7.4.0",
+    "@babel/preset-env": "^7.4.3",
+    "@babel/preset-react": "^7.0.0",
+    "flow-copy-source": "^2.0.3"
   }
 }

@@ -6,7 +6,7 @@ import { code } from 'currency-codes'
 
 import type { KeyPressEvent } from 'TextInput'
 
-type NumericTextInputType = 'currency' | 'decimal' | 'percent'
+type NumericTextInputType = 'currency' | 'decimal'
 
 type NumericTextInputOptionsType = {
   currency?: string,
@@ -61,12 +61,17 @@ const parseInitialValue = (value?: number, decimalPlaces: number): string => {
     initialStringValue = `${integerPart}${fractionalPart}`
   }
 
+  console.log('initial', { value, initialStringValue })
   return initialStringValue
 }
 
+const parseValueString = (value: string, decimalPlaces: number): number => (value !== '')
+  ? parseInt(value, 10) / Math.pow(10, decimalPlaces)
+  : 0
+
 const NumericTextInput = ({
   currency,
-  decimalPlaces,
+  decimalPlaces = 0,
   locale = 'en-GB',
   onUpdate,
   type = 'decimal',
@@ -75,14 +80,8 @@ const NumericTextInput = ({
   ...textInputProps
 }: Props) => {
   const formatConfig = createFormatConfig(type, { currency, decimalPlaces, useGrouping })
-  const [stringValue, setStringValue] = useState(parseInitialValue(value, formatConfig.maximumFractionDigits))
+  const [stringValue, setStringValue] = useState(parseInitialValue(value, formatConfig.minimumFractionDigits))
   const [numberValue, setNumberValue] = useState(value)
-
-  const parseValueString = (value: string, decimalPlaces: number): number => {
-    return (value !== '')
-      ? parseInt(value, 10) / Math.pow(10, decimalPlaces)
-      : 0
-  }
 
   const updateValue = (key: string, onUpdate: (value: number) => mixed) => {
     let newValue = ''

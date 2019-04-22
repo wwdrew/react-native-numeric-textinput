@@ -37,7 +37,7 @@ const createFormatConfig = (style: NumericTextInputType, options: NumericTextInp
   } else {
     const {
       decimalPlaces = 0,
-      useGrouping = false
+      useGrouping
     } = options
 
     formatOptions = Object.assign({}, formatOptions, {

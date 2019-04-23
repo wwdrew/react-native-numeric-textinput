@@ -4,6 +4,10 @@ import React from 'react';
 import { TextInput } from 'react-native';
 import { code } from 'currency-codes';
 
+// Polyfill for Intl until properly supported in Android
+import 'intl';
+import 'intl/locale-data/jsonp/en';
+
 import type { KeyPressEvent } from 'TextInput';
 
 type NumericTextInputType = 'currency' | 'decimal'

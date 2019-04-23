@@ -7,7 +7,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "@wwdrew/react-native-numeric-textinput": "^1.0.0",
+    "@wwdrew/react-native-numeric-textinput": "^1.0.2",
     "react": "16.8.3",
     "react-native": "0.59.5"
   },

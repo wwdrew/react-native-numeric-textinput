@@ -37,8 +37,9 @@
     "@babel/cli": "^7.4.3",
     "@babel/core": "^7.4.3",
     "@babel/plugin-transform-flow-strip-types": "^7.4.0",
-    "@babel/preset-env": "^7.4.3",
     "@babel/preset-react": "^7.0.0",
+    "@react-native-community/eslint-config": "0.0.4",
+    "eslint": "^5.16.0",
     "flow-copy-source": "^2.0.3"
   }
 }

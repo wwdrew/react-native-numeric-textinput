@@ -1,6 +1,6 @@
 {
   "name": "@wwdrew/react-native-numeric-textinput",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A React Native TextInput that formats and displays only numeric inputs, including i18n currency formatting.",
   "main": "lib/NumericTextInput.js",
   "scripts": {

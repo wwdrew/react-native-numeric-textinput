@@ -31,7 +31,8 @@
   },
   "homepage": "https://github.com/wwdrew/react-native-numeric-textinput#readme",
   "dependencies": {
-    "currency-codes": "^1.5.0"
+    "currency-codes": "^1.5.0",
+    "intl": "^1.2.5"
   },
   "devDependencies": {
     "@babel/cli": "^7.4.3",

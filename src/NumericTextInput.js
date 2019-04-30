@@ -1,7 +1,7 @@
 // @flow
 
 import React from 'react';
-import { TextInput } from 'react-native';
+import { Platform, TextInput } from 'react-native';
 import { code } from 'currency-codes';
 
 // Polyfill for Intl until properly supported in Android
@@ -110,7 +110,7 @@ const NumericTextInput = ({
       {...textInputProps}
       onKeyPress={({ nativeEvent: { key } }: KeyPressEvent) => updateValue(key, onUpdate)}
       value={formatValue(value)}
-      keyboardType="number-pad"
+      keyboardType={Platform.OS === 'ios' ? 'number-pad' : 'default'} // Another temporary fix for Android as the numeric keyboards don't fire keyPress events
     />
   );
 };

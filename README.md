@@ -10,7 +10,8 @@ npm install @wwdrew/react-native-numeric-textinput
 
 ## Supported React Native Versions
 
-Currently only working on iOS due to an Android issue where keyPress events aren't being fired on numeric keyboards.
+There is currently a known issue with keyPress events not firing on numeric-style keyboards.
+As a workaround, Android uses the default keyboard until this is fixed.
 
 ## Usage
 

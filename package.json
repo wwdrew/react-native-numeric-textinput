@@ -41,6 +41,7 @@
     "@babel/preset-react": "^7.0.0",
     "@react-native-community/eslint-config": "0.0.4",
     "eslint": "^5.16.0",
-    "flow-copy-source": "^2.0.3"
+    "flow-copy-source": "^2.0.3",
+    "metro-react-native-babel-preset": "^0.54.0"
   }
 }

@@ -39,7 +39,7 @@ class NumericTextInput extends PureComponent<Props> {
     this.formatConfig = this.createFormatConfig(props);
   }
 
-  createFormatConfig = (props: Props): NumberFormatConfig => {
+  createFormatConfig(props: Props): NumberFormatConfig {
     const { locale = 'en-GB', type = 'decimal', useGrouping = true } = props;
     const typeOptions = {};
     let { decimalPlaces = 0 } = props;

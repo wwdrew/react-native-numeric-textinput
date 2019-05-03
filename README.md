@@ -50,25 +50,25 @@ The only required prop is the `onUpdate` callback, the rest are optional.
 ### Currency
 
 ```javascript
-    <NumericInput
-        type='currency'
-        locale='ja-JP'
-        currency='JPY'
-        value={value}
-        onUpdate={(value) => setValue(value)}
-    />
+<NumericInput
+    type='currency'
+    locale='ja-JP'
+    currency='JPY'
+    value={value}
+    onUpdate={(value) => setValue(value)}
+/>
 ```
 
 ### Decimal
 
 ```javascript
-    <NumericInput
-        type='decimal'
-        decimalPlaces={1}
-        useGrouping={false}
-        value={value}
-        onUpdate={(value) => setValue(value)}
-    />
+<NumericInput
+    type='decimal'
+    decimalPlaces={1}
+    useGrouping={false}
+    value={value}
+    onUpdate={(value) => setValue(value)}
+/>
 ```
 
 # License

@@ -1,118 +1,114 @@
 // @flow
 
-import React from 'react';
-import { Platform, TextInput } from 'react-native';
+import React, { PureComponent } from 'react';
+import { TextInput } from 'react-native';
 import { code } from 'currency-codes';
 
 // Polyfill for Intl until properly supported in Android
 import 'intl';
 import 'intl/locale-data/jsonp/en';
 
-import type { KeyPressEvent } from 'TextInput';
-
-type NumericTextInputType = 'currency' | 'decimal'
+type NumericTextInputType = "currency" | "decimal";
 
 type NumericTextInputOptionsType = {
   currency?: string,
   decimalPlaces?: number,
-  useGrouping?: boolean
-}
+  useGrouping?: boolean,
+};
 
 type Props = NumericTextInputOptionsType & {
   locale?: string,
-  onUpdate: (value: number) => mixed,
-  type: NumericTextInputType,
-  value?: number
-}
+  onUpdate: (value: ?number) => mixed,
+  type?: NumericTextInputType,
+  value?: number,
+};
 
-const createFormatConfig = (style: NumericTextInputType, options: NumericTextInputOptionsType) => {
-  let formatOptions = {
-    style,
+type NumberFormatConfig = {
+  divisor: number,
+  type: NumericTextInputType,
+  locale: string,
+  minimumFractionDigits: number,
+};
+
+class NumericTextInput extends PureComponent<Props> {
+  formatConfig: NumberFormatConfig;
+
+  constructor(props: Props) {
+    super(props);
+
+    this.formatConfig = this.createFormatConfig(props);
+  }
+
+  createFormatConfig = (props: Props): NumberFormatConfig => {
+    const { locale = 'en-GB', type = 'decimal', useGrouping = true } = props;
+    const typeOptions = {};
+    let { decimalPlaces = 0 } = props;
+
+    if (type === 'currency') {
+      const { currency = 'GBP' } = props;
+
+      typeOptions.currency = currency;
+      decimalPlaces = code(currency).digits;
+    } else {
+      typeOptions.minimumFractionDigits = decimalPlaces;
+    }
+
+    return Object.assign({}, typeOptions, {
+      locale,
+      style: type,
+      useGrouping,
+      divisor: Math.pow(10, decimalPlaces),
+    });
   };
 
-  if (style === 'currency') {
-    const { currency = 'GBP' } = options;
-    const minimumFractionDigits = code(currency).digits;
+  formatNumberValue(
+    numberValue?: number,
+    numberFormatConfig: NumberFormatConfig
+  ): string {
+    let returnValue = '';
 
-    formatOptions = Object.assign({}, formatOptions, {
-      currency,
-      minimumFractionDigits,
-    });
-  } else {
-    const {
-      decimalPlaces = 0,
-      useGrouping,
-    } = options;
+    if (numberValue) {
+      const { locale, ...config } = numberFormatConfig;
 
-    formatOptions = Object.assign({}, formatOptions, {
-      minimumFractionDigits: decimalPlaces,
-      useGrouping,
-    });
+      returnValue = new Intl.NumberFormat(locale, config).format(numberValue);
+    }
+
+    return returnValue;
   }
 
-  return formatOptions;
-};
+  parseStringValue(
+    text: string,
+    numberFormatConfig: NumberFormatConfig,
+  ): ?number {
+    const digitsOnly = text.match(/\d+/g);
 
-const parseNumberValue = (value?: number, decimalPlaces: number): string => {
-  let stringValue = '';
-
-  if (typeof value !== 'undefined') {
-    const [
-      integerPart = '0',
-      fractionalPart = new Array(decimalPlaces).fill('0').join(''),
-    ] = `${value}`.split('.');
-
-    stringValue = `${integerPart}${fractionalPart}`;
+    return digitsOnly
+      ? parseInt(digitsOnly.join(''), 10) / numberFormatConfig.divisor
+      : undefined;
   }
 
-  return stringValue;
-};
+  onUpdate = (text: string) => {
+    const { onUpdate } = this.props;
+    const parsedValue = this.parseStringValue(text, this.formatConfig);
 
-const parseStringValue = (value: string, decimalPlaces: number): number => (value !== '')
-  ? parseInt(value, 10) / Math.pow(10, decimalPlaces)
-  : 0;
-
-const NumericTextInput = ({
-  currency,
-  decimalPlaces = 0,
-  locale = 'en-GB',
-  onUpdate,
-  type = 'decimal',
-  useGrouping,
-  value = 0,
-  ...textInputProps
-}: Props) => {
-  const formatConfig = createFormatConfig(type, { currency, decimalPlaces, useGrouping });
-  const stringValue = parseNumberValue(value, formatConfig.minimumFractionDigits);
-
-  const updateValue = (key: string, updateCallback: (value: number) => mixed) => {
-    let newValue = '';
-
-    if (/^\d|Backspace$/.test(key)) {
-      if (key === 'Backspace') {
-        if (stringValue !== '') {
-          newValue = stringValue.substring(0, stringValue.length - 1);
-        }
-      } else {
-        newValue = `${stringValue}${key}`;
-      }
-
-      updateCallback(parseStringValue(newValue, formatConfig.minimumFractionDigits));
+    if (onUpdate) {
+      onUpdate(parsedValue);
     }
   };
 
-  const formatValue = (numberValue: number): string => {
-    return new Intl.NumberFormat(locale, formatConfig).format(numberValue);
-  };
+  render() {
+    const { onUpdate, value, ...textInputProps } = this.props;
 
-  return (
-    <TextInput
-      {...textInputProps}
-      onKeyPress={({ nativeEvent: { key } }: KeyPressEvent) => updateValue(key, onUpdate)}
-      value={formatValue(value)}
-      keyboardType={Platform.OS === 'ios' ? 'number-pad' : 'default'} // Another temporary fix for Android as the numeric keyboards don't fire keyPress events
-    />
-  );
-};
+    return (
+      <TextInput
+        {...textInputProps}
+        value={this.formatNumberValue(value, this.formatConfig)}
+        keyboardType="number-pad"
+        onChangeText={this.onUpdate}
+        caretHidden={true}
+      />
+    );
+  }
+}
 
 export default NumericTextInput;

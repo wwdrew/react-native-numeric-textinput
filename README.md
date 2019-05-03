@@ -8,10 +8,10 @@ A React Native TextInput that formats and displays only numeric inputs, includin
 npm install @wwdrew/react-native-numeric-textinput
 ```
 
-## Supported React Native Versions
+## Caveats
 
-There is currently a known issue with keyPress events not firing on numeric-style keyboards.
-As a workaround, Android uses the default keyboard until this is fixed.
+Android currently does not implement the [Intl](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl) object so a polyfill
+is required. At the moment it only includes the `en` locale.
 
 ## Usage
 
